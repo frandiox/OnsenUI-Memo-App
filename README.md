@@ -1,6 +1,6 @@
 # OnsenUI Memo App
 
-This is a simple Memo application for OnsenUI that includes examples of the following components:
+This is a simple Memo application for [OnsenUI](http://onsen.io/ "OnsenUI") that includes examples of the following [components](http://onsen.io/guide/components.html "OnsenUI components"):
 * [ons-navigator]
 * [ons-toolbar]
 * [ons-sliding-menu] - Sliding menu only inside an 'ons-page'
