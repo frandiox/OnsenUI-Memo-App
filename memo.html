@@ -1,0 +1,57 @@
+<ons-page ng-controller="memoController">
+	<ons-toolbar fixed-style>
+		<div class="left"><ons-toolbar-button ng-click="ons.slidingMenu.toggleMenu()"><ons-icon icon="bars"></ons-icon></ons-toolbar-button></div>
+		<div class="center">My tasks</div>
+		<div class="right">
+			<ons-button onclick="myNavigator.pushPage('addtask.html')">
+			    Add Item
+			</ons-button>
+		</div>
+	</ons-toolbar>
+	<p style="text-align: center; color: #999; font-size: 14px;">{{category}}</p>
+	<div class="list-action-menu" ng-hide="countFiltered">Nothing found</div>
+
+	<ons-list>
+		<ons-list-item ng-repeat="item in filteredMemo">
+			<ons-carousel swipeable style="height: 72px; width: 100%;" initial-index="1" auto-scroll>
+				<ons-carousel-item class="list-action-menu">
+					<!-- ACTIONS -->
+					<div class="main-container">
+						<div class="fixer-container">
+							<div class="blockInline">
+								<ons-button ng-click="deleteTask($index);">
+									Delete
+									<ons-icon icon="ion-trash-a">
+								</ons-button>
+							</div>
+							<div class="blockInline">
+								<ons-button ng-click="completeTask($index);">
+									Complete
+									<ons-icon icon="ion-checkmark-round">
+								</ons-button>
+							</div>
+							<div class="blockInline">
+								<ons-button ng-click="setSelected($index); myNavigator.pushPage('taskdetails.html');">
+									Details
+									<ons-icon icon="ion-clipboard">
+								</ons-button>
+							</div>
+						</div>
+					</div>
+
+				</ons-carousel-item>
+				<ons-carousel-item class="list-action-item">
+					<div class="name">
+						{{item.title}}
+					</div>
+				</ons-carousel-item>
+			</ons-carousel>
+
+
+
+
+		</ons-list-item>
+    </ons-list>
+
+
+</ons-page>

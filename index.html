@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<!-- Apply Module -->
+<html ng-app="myApp">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<script src="components/loader.js"></script>
+	<link rel="stylesheet" href="components/loader.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="js/controller.js"></script>
+	<script src="js/model.js"></script>
+</head>
+<body>
+	<ons-navigator var="myNavigator">
+		<ons-page>
+			<ons-toolbar fixed-style>
+				<div class="center">Memo OnsenUI App Example</div>
+			</ons-toolbar>
+			    <div style="margin: auto; width: 95%;">
+				    <div class="margins">
+				    	<ons-icon icon="fa-check-square-o" size="350px"></ons-icon>
+				    </div>
+			    </div>
+			<ons-button modifier="large--cta" onclick="myNavigator.resetToPage('slidingmenu.html')">Start</ons-button>
+	</ons-navigator>
+
+	<!-- SLIDING MENU -->
+	<ons-template id="slidingmenu.html">
+		<ons-page>
+			<ons-sliding-menu var="slidingMenu" swipeable="false" menu-page="menu.html" main-page="memo.html"  side="left" type="overlay" max-slide-distance="200px">
+			</ons-sliding-menu>
+		</ons-page>
+	</ons-template>
+
+	<!-- MENU -->
+	<ons-template id="menu.html">
+		<ons-page fixed-style style="background-color: white">
+			<div class="menuTitle"><p>Categories</p></div>
+		    <ons-list id="categoryList" ng-controller="categoryController">
+
+		        <ons-list-item
+		            modifier="tappable" class="list__item__line-height"
+		            ng-click="setCategory('all');">
+		            <i class="fa fa-home fa-lg" style="color: #666"></i>
+		            &nbsp; All
+					<span class="item-label">{{countAll}}</span>
+		        </ons-list-item>
+		        <ons-list-item
+		            modifier="tappable" class="list__item__line-height"
+		            ng-click="setCategory(' ');">
+		            <i class="fa fa-home fa-lg" style="color: #666"></i>
+		            &nbsp; No category
+					<span class="item-label">{{categoryCount[' '] ? categoryCount[' '] : 0}}</span>
+		        </ons-list-item>
+		        <ons-list-item
+		            modifier="tappable" class="list__item__line-height"
+		            ng-click="setCategory(item);" ng-repeat="item in categoryList">
+		            <i class="fa fa-home fa-lg" style="color: #666"></i>
+		            &nbsp; {{item}}
+					<span class="item-label">{{categoryCount[item]}}</span>
+		        </ons-list-item>
+		    </ons-list>
+		</ons-page>
+	</ons-template>
+</body>
+</html>
