@@ -4,6 +4,7 @@ var Task = function(title, category, description) {
 	this.title = title;
 	this.category = category;
 	this.description = description;
+	this.date = new Date();
 };
 
 var TaskContainer = function() {

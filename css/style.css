@@ -10,7 +10,23 @@
 }
 
 .list-action-menu:active {
-  background-color: #666;
+ 	background-color: #666;
+}
+
+.list-action-item {
+ 	padding: 0 12px;
+	 box-sizing: border-box;
+}
+
+.name {
+	margin-top: 10px;
+	line-height: 1.2;
+}
+
+.desc {
+ 	line-height: 1.2;
+ 	font-size: 14px;
+ 	color: #999;
 }
 
 .blockInline {

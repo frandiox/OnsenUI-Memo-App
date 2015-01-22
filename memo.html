@@ -38,20 +38,16 @@
 							</div>
 						</div>
 					</div>
-
 				</ons-carousel-item>
 				<ons-carousel-item class="list-action-item">
 					<div class="name">
 						{{item.title}}
 					</div>
+					<div class="desc">
+						{{item.date.getFullYear() + "/" + (item.date.getMonth() + 1) + "/" + item.date.getDate()}}
+					</div>
 				</ons-carousel-item>
 			</ons-carousel>
-
-
-
-
 		</ons-list-item>
     </ons-list>
-
-
 </ons-page>
