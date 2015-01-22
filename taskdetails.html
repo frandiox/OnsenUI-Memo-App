@@ -1,0 +1,25 @@
+<ons-page ng-controller="detailsController">
+	<ons-toolbar fixed-style>
+		<div class="left"><ons-back-button>Back</ons-back-button></div>
+		<div class="center"> Task details </div>
+	</ons-toolbar>
+	<div style="text-align: center">
+		<br />
+		<ons-list id="taskList" ng-controller="detailsController">
+			<ons-list-item class="item">
+				<ons-row>
+					<ons-col width="60px"> 
+						<div class="item-thum"></div>
+					</ons-col>
+					<ons-col>
+						<header>
+							<span id="task-title" class="item-title">{{title}}</span>
+							<span id="task-category" class="item-label">{{category}}</span>
+						</header>
+						<p id="task-description" class="item-desc">{{description}}</p>
+					</ons-col>
+				</ons-row>                          
+			</ons-list-item>
+		</ons-list>
+	</div>
+</ons-page>
