@@ -2,10 +2,15 @@
 	<ons-toolbar fixed-style>
 		<div class="left"><ons-back-button>Back</ons-back-button></div>
 		<div class="center"> Task details </div>
+        <div class="right">
+			<ons-button	ng-click="modifyTask(task_title);">
+			Save <ons-icon icon="ion-checkmark" size="40px"></ons-icon>
+			</ons-button>
+        </div>
 	</ons-toolbar>
 	<div style="text-align: center">
 		<br />
-		<ons-list id="taskList" ng-controller="detailsController">
+		<ons-list id="taskList">
 			<ons-list-item class="item">
 				<ons-row>
 					<ons-col width="60px">
@@ -13,10 +18,10 @@
 					</ons-col>
 					<ons-col>
 						<header>
-							<span id="task-title" class="item-title">{{title}}</span>
-							<span id="task-category" class="item-label">{{category}}</span>
-						</header>
-						<p id="task-description" class="item-desc">{{description}}</p>
+<span id="task-title" class="item-title"><input type="text" ng-model="task_title" placeholder="Title" class="text-input text-input--transparent" style="margin-top:8px; width: 100%;"></span>
+<span id="task-category" class="item-title"><input type="text" ng-model="task_category" placeholder="Category" class="text-input text-input--transparent" style="margin-top:8px; width: 100%;"></span>
+<span id="task-description" class="item-title"><textarea type="text" ng-model="task_description" placeholder="Description"  class="textarea textarea--transparent" style="margin-top:8px; width: 100%;"></span>
+</header>
 					</ons-col>
 				</ons-row>
 			</ons-list-item>
