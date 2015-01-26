@@ -6,7 +6,12 @@
 .menuTitle {
 	text-align: center;
 	color: #999;
-	font-size: 14px;
+	font-size: 16px;
+}
+
+.menu-inline {
+	position: relative;
+	display: inline;
 }
 
 .list-action-menu:active {
@@ -14,7 +19,7 @@
 }
 
 .list-action-item {
- 	padding: 0 12px;
+ 	padding: 0 16px;
 	 box-sizing: border-box;
 }
 
@@ -87,3 +92,5 @@
 	color: #999;
 	float: right;
 }
+
+
