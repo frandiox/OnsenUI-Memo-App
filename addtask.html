@@ -3,8 +3,8 @@
         <div class="left"><ons-back-button>Back</ons-back-button></div>
         <div class="center">Create a new task</div>
         <div class="right">
-			<ons-button	ng-click="addTask();">
-			Add <ons-icon icon="ion-checkmark" size="40px"></ons-icon>
+			<ons-button	modifier="quiet" ng-click="addTask();">
+			Add <ons-icon icon="ion-checkmark"></ons-icon>
 			</ons-button>
         </div>
     </ons-toolbar>
@@ -12,9 +12,8 @@
     <div style="text-align: center">
 		<ons-list>
 			<ons-list-item>
-				<input type="text" placeholder="Title" ng-model="task_title" class="text-input text-input--transparent" style="margin-top:8px; width: 100%;">
+				<input id="input-title" type="text" placeholder="Title" ng-model="task_title" class="text-input text-input--transparent" style="margin-top:8px; width: 100%;">
 			</ons-list-item>
-
 			<ons-list-item>
 				<input type="text" placeholder="Category" ng-model="task_category" class="text-input text-input--transparent" style="margin-top:8px; width: 100%;">
 			</ons-list-item>

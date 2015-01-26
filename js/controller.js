@@ -33,11 +33,9 @@ myApp.factory('memoService', function($rootScope) {
 			}
 			memo.raw.splice(memo.filteredIndexes[index], 1);
 			//Some dirty magic to adjust the rest of the indexes after the one that is removed
-			Array.prototype.splice.apply(memo.filteredIndexes, [index, (memo.filteredIndexes.length - index)]
-				.concat(((memo.filteredIndexes.slice(index + 1, memo.filteredIndexes.length))
-					.map(function(index) {
-						return --index;
-					}))));
+			Array.prototype.splice.apply(memo.filteredIndexes, [index,(memo.filteredIndexes.length - index)]
+			.concat(((memo.filteredIndexes.slice(index+1,memo.filteredIndexes.length))
+			.map(function(index){return --index;}))));
 		},
 		clearMemo: function() {
 			memo.raw.length = 0;
@@ -53,14 +51,15 @@ myApp.factory('memoService', function($rootScope) {
 		},
 		setSelected: function(index) {
 			selectedIndex = memo.filteredIndexes[index];
-			console.log(index + ' -> ' + selectedIndex);
+			console.log(index + ' -> ' +selectedIndex);
 		},
-		modifySelected: function(newTask) {
+		modifySelected: function(newTask){
 			console.log(newTask.title);
 			console.log(selectedIndex);
 			console.log(memo.raw[selectedIndex].title);
 			memo.raw[selectedIndex] = newTask;
 			console.log(memo.raw[selectedIndex].title);
+			
 		},
 		setCategory: function(newCategory) {
 			memo.filter = newCategory.toLowerCase();
@@ -114,6 +113,18 @@ myApp.factory('memoService', function($rootScope) {
 		}
 	};
 });
+
+/*filteredMemo.length = 0;
+if(category.toLowerCase() == 'all'){ // No restrictions
+	filteredMemo = memo.slice();
+}else{ // Apply category filter
+	for (var index in memo){
+		if(memo[index].category.toLowerCase() == category.toLowerCase()){
+			filteredMemo.push(memo[index]);
+		}
+	}
+}*/
+
 
 //Define Controller1
 myApp.controller('memoController', function($scope, memoService) {
@@ -175,10 +186,14 @@ myApp.controller('categoryController', function($scope, memoService) {
 
 //Define Controller2
 myApp.controller('addTaskController', function($scope, memoService) {
+	
+	ons.createPopover('popover.html').then(function(popover) {
+		$scope.popover = popover;
+	});
 
 	$scope.addTask = function() {
 
-		if (typeof($scope.task_title) != 'undefined') {
+		if (typeof($scope.task_title) != 'undefined' && $scope.task_title != '') {
 			var category = $scope.task_category;
 			if (typeof(category) == 'undefined') {
 				category = ' ';
@@ -187,22 +202,38 @@ myApp.controller('addTaskController', function($scope, memoService) {
 			var newTask = new Task($scope.task_title, category, $scope.task_description);
 			memoService.addMemo(newTask);
 			$scope.ons.navigator.popPage();
+		}else{
+			$scope.popover.show('#input-title');
 		}
 	};
 
 
 });
 
+/*
 //Define Controller3
+myApp.controller('detailsController', function($scope, memoService) {
+	var selected = memoService.getSelected();
+	$scope.title = selected.title;
+	$scope.category = selected.category;
+	$scope.description = selected.description;
+
+});*/
+
+//Define Controller4
 myApp.controller('detailsController', function($scope, memoService) {
 	var selected = memoService.getSelected();
 	$scope.task_title = selected.title;
 	$scope.task_category = selected.category;
 	$scope.task_description = selected.description;
-
+	
+	ons.createPopover('popover.html').then(function(popover) {
+		$scope.popover = popover;
+	});
+	
 	$scope.modifyTask = function() {
-
-		if (typeof($scope.task_title) != 'undefined') {
+		
+		if (typeof($scope.task_title) != 'undefined' && $scope.task_title != '') {
 			var category = $scope.task_category;
 			if (typeof(category) == 'undefined') {
 				category = ' ';
@@ -212,10 +243,12 @@ myApp.controller('detailsController', function($scope, memoService) {
 			selected.category = $scope.task_category;
 			selected.description = $scope.task_description;
 			$scope.ons.navigator.popPage();
+		}else{
+			$scope.popover.show('#task-title');
 		}
 	};
-	$scope.storeChanges = function(newTitle, newDescription) {
+	$scope.storeChanges = function(newTitle, newDescription){
 		$scope.newTitle = newTitle;
 	};
-
+	
 });
