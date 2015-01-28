@@ -19,23 +19,14 @@ myApp.factory('memoService', function($rootScope) {
 			return memo.filteredMemo();
 		},
 		addMemo: function(newTask) {
-			this.reloadFilter(newTask);
 			memo.raw.push(newTask);
-			memo.count++;
+			this.addToView(newTask);
 			this.addCategory(newTask.category);
 		},
 		removeMemo: function(index) {
-			var category = memo.raw[memo.filteredIndexes[index]].category;
-			memo.categoryCount[category] --;
-			if (memo.categoryCount[category] <= 0) {
-				delete memo.categoryCount[category];
-				memo.categoryList.splice(memo.categoryList.indexOf(category), 1);
-			}
+			this.decreaseCategory(index);
 			memo.raw.splice(memo.filteredIndexes[index], 1);
-			//Some dirty magic to adjust the rest of the indexes after the one that is removed
-			Array.prototype.splice.apply(memo.filteredIndexes, [index,(memo.filteredIndexes.length - index)]
-			.concat(((memo.filteredIndexes.slice(index+1,memo.filteredIndexes.length))
-			.map(function(index){return --index;}))));
+			this.removeFromView(index,1);
 		},
 		clearMemo: function() {
 			memo.raw.length = 0;
@@ -47,23 +38,24 @@ myApp.factory('memoService', function($rootScope) {
 			return memo.filteredIndexes.length;
 		},
 		getSelected: function() {
-			return memo.raw[selectedIndex];
+			return memo.raw[memo.filteredIndexes[selectedIndex]];
+		},
+		getSelectedIndex: function() {
+			return selectedIndex;
 		},
 		setSelected: function(index) {
-			selectedIndex = memo.filteredIndexes[index];
-			console.log(index + ' -> ' +selectedIndex);
+			selectedIndex = index;//memo.filteredIndexes[index];
+
 		},
 		modifySelected: function(newTask){
-			console.log(newTask.title);
-			console.log(selectedIndex);
-			console.log(memo.raw[selectedIndex].title);
-			memo.raw[selectedIndex] = newTask;
-			console.log(memo.raw[selectedIndex].title);
-			
+			memo.raw[memo.filteredIndexes[selectedIndex]] = newTask;
+		},
+		setComplete: function(index) {
+			memo.raw[memo.filteredIndexes[index]].category = '~';
 		},
 		setCategory: function(newCategory) {
 			memo.filter = newCategory.toLowerCase();
-			this.reloadFilter();
+			this.addToView();
 		},
 		getCategory: function() {
 			return memo.filter;
@@ -77,7 +69,7 @@ myApp.factory('memoService', function($rootScope) {
 			return memo.categoryCount;
 		},
 		addCategory: function(newCategory) {
-			if (newCategory != ' ') { // ' ' ---> No category
+			if (newCategory != ' ' && newCategory.toLowerCase() != '*' && newCategory != '~') { // ' ' ---> No category
 				memo.categoryList.binaryInsert(newCategory);
 			}
 
@@ -87,16 +79,30 @@ myApp.factory('memoService', function($rootScope) {
 				memo.categoryCount[newCategory] = 1;
 			}
 		},
-		reloadFilter: function(newTask) {
+		decreaseCategory: function(index){
+			var category = memo.raw[memo.filteredIndexes[index]].category;
+			memo.categoryCount[category] --;
+			if (memo.categoryCount[category] <= 0) {
+				delete memo.categoryCount[category];
+				memo.categoryList.splice(memo.categoryList.indexOf(category), 1);
+			}
+		},
+		removeFromView: function(index, itemsDeleted){
+			//Some dirty magic to adjust the rest of the indexes after the one that is removed
+			Array.prototype.splice.apply(memo.filteredIndexes, [index,(memo.filteredIndexes.length - index)]
+			.concat(((memo.filteredIndexes.slice(index+1,memo.filteredIndexes.length))
+			.map(function(index){return index-=itemsDeleted;}))));
+		},
+		addToView: function(newTask) {
 			if (typeof newTask !== 'undefined') { // Add just one new element to the view
-				if (memo.filter == 'all' || newTask.category === memo.filter) { // Only if matchs the category
-					memo.filteredIndexes.push(memo.count);
+				if (memo.filter == '*' || newTask.category === memo.filter) { // Only if matchs the category
+					memo.filteredIndexes.push(this.countRawMemo() - 1);
 				}
 			} else {
 				memo.filteredIndexes.length = 0;
-				if (memo.filter == 'all') { // No restrictions
-					var limit = memo.count,
-						c = 0;
+				if (memo.filter == '*') { // No restrictions
+					var limit = this.countRawMemo(),
+					c = 0;
 					while (c < limit) {
 						memo.filteredIndexes[c] = c++;
 					}
@@ -114,18 +120,6 @@ myApp.factory('memoService', function($rootScope) {
 	};
 });
 
-/*filteredMemo.length = 0;
-if(category.toLowerCase() == 'all'){ // No restrictions
-	filteredMemo = memo.slice();
-}else{ // Apply category filter
-	for (var index in memo){
-		if(memo[index].category.toLowerCase() == category.toLowerCase()){
-			filteredMemo.push(memo[index]);
-		}
-	}
-}*/
-
-
 //Define Controller1
 myApp.controller('memoController', function($scope, memoService) {
 	$scope.$watch(function() {
@@ -137,7 +131,14 @@ myApp.controller('memoController', function($scope, memoService) {
 	$scope.$watch(function() {
 		return memoService.getCategory();
 	}, function(newValue) {
-		$scope.category = newValue === ' ' ? "no category" : newValue;
+		if(newValue == '*'){
+			$scope.category_label = 'All tasks';
+		}else if(newValue == ' '){
+			$scope.category_label = 'Tasks without category';
+		}else if(newValue == '~'){
+			$scope.category_label = 'Completed tasks';
+		}else
+			$scope.category_label = 'Category: ' + newValue;
 	}, true);
 
 	$scope.$watch(function() {
@@ -150,13 +151,20 @@ myApp.controller('memoController', function($scope, memoService) {
 		memoService.setSelected(index);
 	};
 	$scope.deleteTask = function(index) {
-		console.log(index);
 		memoService.removeMemo(index);
+	};
+	$scope.completeTask = function(index) {
+		memoService.decreaseCategory(index);
+		memoService.addCategory('~');
+		memoService.setComplete(index);
+		if(memoService.getCategory() != '*'){
+			memoService.removeFromView(index,0);
+		}
 	};
 
 });
 
-//Define Controller1
+//Define Controller2
 myApp.controller('categoryController', function($scope, memoService) {
 
 	$scope.$watch(function() {
@@ -184,15 +192,13 @@ myApp.controller('categoryController', function($scope, memoService) {
 
 });
 
-//Define Controller2
+//Define Controller3
 myApp.controller('addTaskController', function($scope, memoService) {
-	
 	ons.createPopover('popover.html').then(function(popover) {
 		$scope.popover = popover;
 	});
 
 	$scope.addTask = function() {
-
 		if (typeof($scope.task_title) != 'undefined' && $scope.task_title != '') {
 			var category = $scope.task_category;
 			if (typeof(category) == 'undefined') {
@@ -210,37 +216,31 @@ myApp.controller('addTaskController', function($scope, memoService) {
 
 });
 
-/*
-//Define Controller3
-myApp.controller('detailsController', function($scope, memoService) {
-	var selected = memoService.getSelected();
-	$scope.title = selected.title;
-	$scope.category = selected.category;
-	$scope.description = selected.description;
-
-});*/
-
 //Define Controller4
 myApp.controller('detailsController', function($scope, memoService) {
 	var selected = memoService.getSelected();
 	$scope.task_title = selected.title;
 	$scope.task_category = selected.category;
 	$scope.task_description = selected.description;
-	
 	ons.createPopover('popover.html').then(function(popover) {
 		$scope.popover = popover;
 	});
-	
 	$scope.modifyTask = function() {
-		
 		if (typeof($scope.task_title) != 'undefined' && $scope.task_title != '') {
+			selected.title = $scope.task_title;
 			var category = $scope.task_category;
 			if (typeof(category) == 'undefined') {
 				category = ' ';
 			}
 			category = category.replace(/\s{2,}/g, ' ');
-			selected.title = $scope.task_title;
-			selected.category = $scope.task_category;
+			if(category != selected.category){
+				memoService.decreaseCategory(memoService.getSelectedIndex());
+				memoService.addCategory(category);
+				selected.category = $scope.task_category;
+				if(memoService.getCategory() != '*'){
+					memoService.removeFromView(memoService.getSelectedIndex(),0);
+				}
+			}
 			selected.description = $scope.task_description;
 			$scope.ons.navigator.popPage();
 		}else{
@@ -250,5 +250,4 @@ myApp.controller('detailsController', function($scope, memoService) {
 	$scope.storeChanges = function(newTitle, newDescription){
 		$scope.newTitle = newTitle;
 	};
-	
 });

@@ -18,7 +18,7 @@
 			</ons-toolbar>
 			    <div style="margin: auto; width: 95%;">
 				    <div class="margins">
-				    	<ons-icon icon="fa-check-square-o" size="350px"></ons-icon>
+				    	<span style="color:#666"><ons-icon icon="fa-check-square-o" size="22em"></ons-icon></span>
 				    </div>
 			    </div>
 			<ons-button modifier="large--cta" onclick="myNavigator.resetToPage('slidingmenu.html')">Start</ons-button>
@@ -35,32 +35,51 @@
 	<!-- MENU -->
 	<ons-template id="menu.html">
 		<ons-page fixed-style style="background-color: white">
-			<div class="menuTitle"><p>Categories</p></div>
-		    <ons-list id="categoryList" ng-controller="categoryController">
-
+			<ons-toolbar fixed-style>
+				<div class="center">Categories</div>
+				<div class="right" style="margin-top:5px"><ons-button modifier="quiet" ng-click="ons.slidingMenu.closeMenu()"><ons-icon icon="fa-chevron-left" size="25px" fixed-width="false" style="color: #5087c3"></ons-icon></ons-back-button></div>
+			</ons-toolbar>
+			<ons-list id="categoryList" ng-controller="categoryController">
 		        <ons-list-item
 		            modifier="tappable" class="list__item__line-height"
-		            ng-click="setCategory('all');">
-		            <i class="fa fa-home fa-lg" style="color: #666"></i>
+		            ng-click="setCategory('*');">
+		            <i class="ion-home fa-lg" style="color: #666"></i>
 		            &nbsp; All
 					<span class="item-label">{{countAll}}</span>
 		        </ons-list-item>
 		        <ons-list-item
 		            modifier="tappable" class="list__item__line-height"
+		            ng-click="setCategory('~');">
+		            <i class="ion-checkmark" style="color: #666"></i>
+		            &nbsp; Completed
+					<span class="item-label">{{categoryCount['~'] ? categoryCount['~'] : 0}}</span>
+		        </ons-list-item>
+		        <ons-list-item
+		            modifier="tappable" class="list__item__line-height"
 		            ng-click="setCategory(' ');">
-		            <i class="fa fa-home fa-lg" style="color: #666"></i>
+		            <i class="ion-qr-scanner fa-lg" style="color: #666"></i>
 		            &nbsp; No category
 					<span class="item-label">{{categoryCount[' '] ? categoryCount[' '] : 0}}</span>
 		        </ons-list-item>
 		        <ons-list-item
 		            modifier="tappable" class="list__item__line-height"
 		            ng-click="setCategory(item);" ng-repeat="item in categoryList">
-		            <i class="fa fa-home fa-lg" style="color: #666"></i>
+		            <i class="ion-folder fa-lg" style="color: #666"></i>
 		            &nbsp; {{item}}
 					<span class="item-label">{{categoryCount[item]}}</span>
 		        </ons-list-item>
 		    </ons-list>
 		</ons-page>
+	</ons-template>
+
+	<!-- POPOVER -->
+	<ons-template id="popover.html">
+		<ons-popover direction="up down" cancelable>
+			<div style="text-align: center; opacity: 0.5;">
+				<p>Title input is empty!</p>
+				<p><small>Enter a name for your task to create or modify it.</small></p>
+			</div>
+		</ons-popover>
 	</ons-template>
 </body>
 </html>

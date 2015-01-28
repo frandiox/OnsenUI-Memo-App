@@ -8,17 +8,16 @@ var Task = function(title, category, description) {
 };
 
 var TaskContainer = function() {
-	this.count = 0;
 	this.raw = [];
 	this.filteredIndexes = [];
-	this.filter = "all";
+	this.filter = "*";
 	this.categoryList = [];
 	this.categoryCount = {};
 	/*this.categoryList = function(){
 		return Object.keys(this.categoryCount);
 	};*/
 	this.filteredMemo = function() {
-		if (this.filter === "all") {
+		if (this.filter === "*") {
 			return this.raw.slice();
 		} else {
 			return this.filteredIndexes.map(function(index) {
@@ -27,7 +26,6 @@ var TaskContainer = function() {
 		}
 	};
 	this.fixtures = function() {
-		this.count = 4;
 		this.raw = [new Task("Buy bananas", "shopping", ""), new Task("Call mother", "calls", ""), new Task("Buy apples", "shopping", ""), new Task("Study Japanese", "homework", "")];
 		this.filteredIndexes = [0, 2];
 		this.filter = "shopping";
