@@ -1,13 +1,13 @@
-// Task object definition
+// Item object definition
 
-var Task = function(title, category, description) {
-	this.title = title;
+var Item = function(name, category, description) {
+	this.name = name;
 	this.category = category;
 	this.description = description;
 	this.date = new Date();
 };
 
-var TaskContainer = function() {
+var MemoContainer = function() {
 	this.raw = [];
 	this.filteredIndexes = [];
 	this.filter = "*";
@@ -26,7 +26,7 @@ var TaskContainer = function() {
 		}
 	};
 	this.fixtures = function() {
-		this.raw = [new Task("Buy bananas", "shopping", ""), new Task("Call mother", "calls", ""), new Task("Buy apples", "shopping", ""), new Task("Study Japanese", "homework", "")];
+		this.raw = [new Item("Buy bananas", "shopping", ""), new Item("Call mother", "calls", ""), new Item("Buy apples", "shopping", ""), new Item("Study Japanese", "homework", "")];
 		this.filteredIndexes = [0, 2];
 		this.filter = "shopping";
 		this.categoryList = "calls homework shopping".split(' ');

@@ -5,7 +5,7 @@ var myApp = angular.module('myApp', ['onsen']);
 myApp.factory('memoService', function($rootScope) {
 
 
-	var memo = new TaskContainer();
+	var memo = new MemoContainer();
 	memo.fixtures();
 
 	var selectedIndex = 0;
@@ -18,15 +18,15 @@ myApp.factory('memoService', function($rootScope) {
 		getFilteredMemo: function() {
 			return memo.filteredMemo();
 		},
-		addMemo: function(newTask) {
-			memo.raw.push(newTask);
-			this.addToView(newTask);
-			this.addCategory(newTask.category);
+		addMemo: function(newItem) {
+			memo.raw.push(newItem);
+			this.addToView(newItem);
+			this.addCategory(newItem.category);
 		},
 		removeMemo: function(index) {
 			this.decreaseCategory(index);
 			memo.raw.splice(memo.filteredIndexes[index], 1);
-			this.removeFromView(index,1);
+			this.removeFromView(index, 1);
 		},
 		clearMemo: function() {
 			memo.raw.length = 0;
@@ -44,11 +44,10 @@ myApp.factory('memoService', function($rootScope) {
 			return selectedIndex;
 		},
 		setSelected: function(index) {
-			selectedIndex = index;//memo.filteredIndexes[index];
-
+			selectedIndex = index;
 		},
-		modifySelected: function(newTask){
-			memo.raw[memo.filteredIndexes[selectedIndex]] = newTask;
+		modifySelected: function(newItem) {
+			memo.raw[memo.filteredIndexes[selectedIndex]] = newItem;
 		},
 		setComplete: function(index) {
 			memo.raw[memo.filteredIndexes[index]].category = '~';
@@ -72,14 +71,13 @@ myApp.factory('memoService', function($rootScope) {
 			if (newCategory != ' ' && newCategory.toLowerCase() != '*' && newCategory != '~') { // ' ' ---> No category
 				memo.categoryList.binaryInsert(newCategory);
 			}
-
 			if (newCategory in memo.categoryCount) {
 				memo.categoryCount[newCategory] ++;
 			} else {
 				memo.categoryCount[newCategory] = 1;
 			}
 		},
-		decreaseCategory: function(index){
+		decreaseCategory: function(index) {
 			var category = memo.raw[memo.filteredIndexes[index]].category;
 			memo.categoryCount[category] --;
 			if (memo.categoryCount[category] <= 0) {
@@ -87,27 +85,28 @@ myApp.factory('memoService', function($rootScope) {
 				memo.categoryList.splice(memo.categoryList.indexOf(category), 1);
 			}
 		},
-		removeFromView: function(index, itemsDeleted){
+		removeFromView: function(index, itemsDeleted) {
 			//Some dirty magic to adjust the rest of the indexes after the one that is removed
-			Array.prototype.splice.apply(memo.filteredIndexes, [index,(memo.filteredIndexes.length - index)]
-			.concat(((memo.filteredIndexes.slice(index+1,memo.filteredIndexes.length))
-			.map(function(index){return index-=itemsDeleted;}))));
+			Array.prototype.splice.apply(memo.filteredIndexes, [index, (memo.filteredIndexes.length - index)]
+				.concat(((memo.filteredIndexes.slice(index + 1, memo.filteredIndexes.length))
+					.map(function(index) {
+						return index -= itemsDeleted;
+					}))));
 		},
-		addToView: function(newTask) {
-			if (typeof newTask !== 'undefined') { // Add just one new element to the view
-				if (memo.filter == '*' || newTask.category === memo.filter) { // Only if matchs the category
+		addToView: function(newItem) {
+			if (typeof newItem !== 'undefined') { // Add just one new element to the view
+				if (memo.filter == '*' || newItem.category === memo.filter) { // Only if matchs the category
 					memo.filteredIndexes.push(this.countRawMemo() - 1);
 				}
 			} else {
 				memo.filteredIndexes.length = 0;
 				if (memo.filter == '*') { // No restrictions
 					var limit = this.countRawMemo(),
-					c = 0;
+						c = 0;
 					while (c < limit) {
 						memo.filteredIndexes[c] = c++;
 					}
 				} else { // Apply category filter
-					console.log(memo.raw.length);
 					for (var index = 0; index < memo.raw.length; index++) {
 						//for (var index in memo.raw){ // <-- This also access to the "binaryInsert" Array's method declared in model.js...
 						if (memo.raw[index].category.toLowerCase() == memo.filter) {
@@ -131,13 +130,13 @@ myApp.controller('memoController', function($scope, memoService) {
 	$scope.$watch(function() {
 		return memoService.getCategory();
 	}, function(newValue) {
-		if(newValue == '*'){
+		if (newValue == '*') {
 			$scope.category_label = 'All tasks';
-		}else if(newValue == ' '){
+		} else if (newValue == ' ') {
 			$scope.category_label = 'Tasks without category';
-		}else if(newValue == '~'){
+		} else if (newValue == '~') {
 			$scope.category_label = 'Completed tasks';
-		}else
+		} else
 			$scope.category_label = 'Category: ' + newValue;
 	}, true);
 
@@ -150,23 +149,21 @@ myApp.controller('memoController', function($scope, memoService) {
 	$scope.setSelected = function(index) {
 		memoService.setSelected(index);
 	};
-	$scope.deleteTask = function(index) {
+	$scope.deleteItem = function(index) {
 		memoService.removeMemo(index);
 	};
-	$scope.completeTask = function(index) {
+	$scope.completeItem = function(index) {
 		memoService.decreaseCategory(index);
 		memoService.addCategory('~');
 		memoService.setComplete(index);
-		if(memoService.getCategory() != '*'){
-			memoService.removeFromView(index,0);
+		if (memoService.getCategory() != '*') {
+			memoService.removeFromView(index, 0);
 		}
 	};
-
 });
 
 //Define Controller2
 myApp.controller('categoryController', function($scope, memoService) {
-
 	$scope.$watch(function() {
 		return memoService.getCategoryList();
 	}, function(newValue) {
@@ -193,61 +190,62 @@ myApp.controller('categoryController', function($scope, memoService) {
 });
 
 //Define Controller3
-myApp.controller('addTaskController', function($scope, memoService) {
+myApp.controller('addItemController', function($scope, memoService) {
 	ons.createPopover('popover.html').then(function(popover) {
 		$scope.popover = popover;
 	});
 
-	$scope.addTask = function() {
-		if (typeof($scope.task_title) != 'undefined' && $scope.task_title != '') {
-			var category = $scope.task_category;
-			if (typeof(category) == 'undefined') {
+	$scope.addItem = function() {
+		if (typeof($scope.item_name) != 'undefined' && $scope.item_name !== '') {
+			var category = $scope.item_category;
+			if (typeof(category) == 'undefined' || category === '') {
 				category = ' ';
 			}
 			category = category.replace(/\s{2,}/g, ' ');
-			var newTask = new Task($scope.task_title, category, $scope.task_description);
-			memoService.addMemo(newTask);
+			var newItem = new Item($scope.item_name, category, $scope.item_description);
+			memoService.addMemo(newItem);
 			$scope.ons.navigator.popPage();
-		}else{
-			$scope.popover.show('#input-title');
+		} else {
+			$scope.popover.show('#input-name');
 		}
 	};
-
-
 });
 
 //Define Controller4
 myApp.controller('detailsController', function($scope, memoService) {
 	var selected = memoService.getSelected();
-	$scope.task_title = selected.title;
-	$scope.task_category = selected.category;
-	$scope.task_description = selected.description;
+	$scope.item_name = selected.name;
+	$scope.item_category = selected.category;
+	$scope.item_description = selected.description;
+
 	ons.createPopover('popover.html').then(function(popover) {
 		$scope.popover = popover;
 	});
-	$scope.modifyTask = function() {
-		if (typeof($scope.task_title) != 'undefined' && $scope.task_title != '') {
-			selected.title = $scope.task_title;
-			var category = $scope.task_category;
-			if (typeof(category) == 'undefined') {
+
+	$scope.modifyItem = function() {
+
+		if (typeof($scope.item_name) != 'undefined' && $scope.item_name !== '') {
+			selected.name = $scope.item_name;
+			var category = $scope.item_category;
+			if (typeof(category) == 'undefined' || category === '') {
 				category = ' ';
 			}
 			category = category.replace(/\s{2,}/g, ' ');
-			if(category != selected.category){
+			if (category != selected.category) {
 				memoService.decreaseCategory(memoService.getSelectedIndex());
 				memoService.addCategory(category);
-				selected.category = $scope.task_category;
-				if(memoService.getCategory() != '*'){
-					memoService.removeFromView(memoService.getSelectedIndex(),0);
+				selected.category = category;
+				if (memoService.getCategory() != '*') {
+					memoService.removeFromView(memoService.getSelectedIndex(), 0);
 				}
 			}
-			selected.description = $scope.task_description;
+			selected.description = $scope.item_description;
 			$scope.ons.navigator.popPage();
-		}else{
-			$scope.popover.show('#task-title');
+		} else {
+			$scope.popover.show('#item-name');
 		}
 	};
-	$scope.storeChanges = function(newTitle, newDescription){
-		$scope.newTitle = newTitle;
+	$scope.storeChanges = function(newname, newDescription) {
+		$scope.newname = newname;
 	};
 });
