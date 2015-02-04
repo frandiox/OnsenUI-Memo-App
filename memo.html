@@ -3,7 +3,7 @@
 		<div class="left"><ons-toolbar-button ng-click="ons.slidingMenu.toggleMenu()"><ons-icon icon="bars"></ons-icon></ons-toolbar-button></div>
 		<div class="center">My tasks</div>
 		<div class="right">
-			<ons-button modifier="quiet" onclick="myNavigator.pushPage('addtask.html')">
+			<ons-button modifier="quiet" onclick="myNavigator.pushPage('additem.html')">
 			    New <ons-icon icon="fa-plus-circle "></ons-icon>
 			</ons-button>
 		</div>
@@ -19,19 +19,19 @@
 					<div class="main-container">
 						<div class="fixer-container">
 							<div class="blockInline">
-								<ons-button ng-click="deleteTask($index);">
+								<ons-button ng-click="deleteItem($index);">
 									Delete
 									<ons-icon icon="ion-trash-a"></ons-icon>
 								</ons-button>
 							</div>
 							<div class="blockInline">
-								<ons-button ng-click="completeTask($index); carousel['id' + $index].setActiveCarouselItemIndex(1);" ng-show="item.category!='~'">
+								<ons-button ng-click="carousel['id'+$index].setActiveCarouselItemIndex(1); completeItem($index);" ng-show="item.category!='~'">
 									Complete
 									<ons-icon icon="ion-checkmark-round"></ons-icon>
 								</ons-button>
 							</div>
 							<div class="blockInline">
-								<ons-button ng-click="setSelected($index); myNavigator.pushPage('taskdetails.html');">
+								<ons-button ng-click="setSelected($index); myNavigator.pushPage('itemdetails.html');">
 									Details
 									<ons-icon icon="ion-clipboard"></ons-icon>
 								</ons-button>
@@ -41,7 +41,7 @@
 				</ons-carousel-item>
 				<ons-carousel-item class="list-action-item">
 					<div class="name">
-						{{item.title}} <span class="desc"><ons-icon icon="ion-checkmark-round" ng-show="item.category=='~'"></ons-icon></span>
+						{{item.name}} <span class="desc"><ons-icon icon="ion-checkmark-round" ng-show="item.category=='~'"></ons-icon></span>
 					</div>
 					<div class="desc">
 						{{item.date.getFullYear() + "/" + (item.date.getMonth() + 1) + "/" + item.date.getDate()}}

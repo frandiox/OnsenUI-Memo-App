@@ -7,8 +7,8 @@
 	<script src="components/loader.js"></script>
 	<link rel="stylesheet" href="components/loader.css">
 	<link rel="stylesheet" href="css/style.css">
-	<script src="js/controller.js"></script>
-	<script src="js/model.js"></script>
+	<script src="js/controllers/MemoController.js"></script>
+	<script src="js/models/Memo.js"></script>
 </head>
 <body>
 	<ons-navigator var="myNavigator">
@@ -76,7 +76,7 @@
 	<ons-template id="popover.html">
 		<ons-popover direction="up down" cancelable>
 			<div style="text-align: center; opacity: 0.5;">
-				<p>Title input is empty!</p>
+				<p>Name input is empty!</p>
 				<p><small>Enter a name for your task to create or modify it.</small></p>
 			</div>
 		</ons-popover>
