@@ -7,8 +7,17 @@
 	<script src="components/loader.js"></script>
 	<link rel="stylesheet" href="components/loader.css">
 	<link rel="stylesheet" href="css/style.css">
-	<script src="js/controllers/MemoController.js"></script>
+	<script>
+		var myApp = angular.module('myApp', ['onsen']);
+		var ALL = '*', FILTER = '=', COMPLETED = '~';
+	</script>
 	<script src="js/models/Memo.js"></script>
+	<script src="js/services/MemoService.js"></script>
+	<script src="js/controllers/AddItemController.js"></script>
+	<script src="js/controllers/CategoryController.js"></script>
+	<script src="js/controllers/DetailsController.js"></script>
+	<script src="js/controllers/MemoController.js"></script>
+	<script src="js/controllers/SlidingMenuController.js"></script>
 </head>
 <body>
 	<ons-navigator var="myNavigator">
@@ -37,36 +46,39 @@
 		<ons-page fixed-style style="background-color: white">
 			<ons-toolbar fixed-style>
 				<div class="center">Categories</div>
-				<div class="right" style="margin-top:5px"><ons-button modifier="quiet" ng-click="ons.slidingMenu.closeMenu()"><ons-icon icon="fa-chevron-left" size="25px" fixed-width="false" style="color: #5087c3"></ons-icon></ons-back-button></div>
+				<div class="right" style="margin-top:5px"><ons-button modifier="quiet" ng-click="slidingMenu.closeMenu()"><ons-icon icon="fa-chevron-left" size="25px" fixed-width="false" style="color: #5087c3"></ons-icon></ons-back-button></div>
 			</ons-toolbar>
 			<ons-list id="categoryList" ng-controller="categoryController">
 		        <ons-list-item
 		            modifier="tappable" class="list__item__line-height"
-		            ng-click="setCategory('*');">
+		            ng-click="setViewRefresh('*'); slidingMenu.closeMenu();">
 		            <i class="ion-home fa-lg" style="color: #666"></i>
 		            &nbsp; All
 					<span class="item-label">{{countAll}}</span>
 		        </ons-list-item>
 		        <ons-list-item
 		            modifier="tappable" class="list__item__line-height"
-		            ng-click="setCategory('~');">
+		            ng-click="setViewRefresh('~'); slidingMenu.closeMenu();">
 		            <i class="ion-checkmark" style="color: #666"></i>
 		            &nbsp; Completed
-					<span class="item-label">{{categoryCount['~'] ? categoryCount['~'] : 0}}</span>
+					<span class="item-label">{{completedCount ? completedCount : 0}}</span>
 		        </ons-list-item>
+		        <ons-list-header>
+		        	<div style="text-align: center;"><ons-icon icon="ion-minus-round"></ons-icon></div>
+		        </ons-list-header>
 		        <ons-list-item
 		            modifier="tappable" class="list__item__line-height"
-		            ng-click="setCategory(' ');">
+		            ng-click="setViewRefresh('=', ' '); slidingMenu.closeMenu();">
 		            <i class="ion-qr-scanner fa-lg" style="color: #666"></i>
 		            &nbsp; No category
-					<span class="item-label">{{categoryCount[' '] ? categoryCount[' '] : 0}}</span>
+					<span class="item-label">{{countCategories[' '] ? (countCategories[' '].total - countCategories[' '].completed) : 0}} ({{countCategories[' '] ? countCategories[' '].total : 0}})</span>
 		        </ons-list-item>
 		        <ons-list-item
 		            modifier="tappable" class="list__item__line-height"
-		            ng-click="setCategory(item);" ng-repeat="item in categoryList">
+		            ng-click="setViewRefresh('=', item); slidingMenu.closeMenu();" ng-repeat="item in categoryList">
 		            <i class="ion-folder fa-lg" style="color: #666"></i>
 		            &nbsp; {{item}}
-					<span class="item-label">{{categoryCount[item]}}</span>
+					<span class="item-label">{{countCategories[item].total - countCategories[item].completed}} ({{countCategories[item].total}})</span>
 		        </ons-list-item>
 		    </ons-list>
 		</ons-page>

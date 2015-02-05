@@ -1,6 +1,6 @@
 <ons-page ng-controller="memoController">
-	<ons-toolbar fixed-style>
-		<div class="left"><ons-toolbar-button ng-click="ons.slidingMenu.toggleMenu()"><ons-icon icon="bars"></ons-icon></ons-toolbar-button></div>
+	<ons-toolbar fixed-style ng-controller="slidingMenuController">
+		<div class="left"><ons-toolbar-button ng-click="slidingMenu.openMenu(); checkSlidingMenuStatus();"><ons-icon icon="bars"></ons-icon></ons-toolbar-button></div>
 		<div class="center">My tasks</div>
 		<div class="right">
 			<ons-button modifier="quiet" onclick="myNavigator.pushPage('additem.html')">
@@ -10,22 +10,21 @@
 	</ons-toolbar>
 	<p style="text-align: center; color: #999; font-size: 14px;">{{category_label}}</p>
 	<div class="list-action-item" ng-hide="countFiltered">Nothing found</div>
-
 	<ons-list>
-		<ons-list-item ng-repeat="item in filteredMemo">
+		<ons-list-item ng-repeat="item in filteredMemo track by $index">
 			<ons-carousel var="{{'carousel.id' + $index}}" swipeable style="height: 72px; width: 100%;" initial-index="1" auto-scroll>
 				<ons-carousel-item class="list-action-menu">
 					<!-- ACTIONS -->
 					<div class="main-container">
 						<div class="fixer-container">
 							<div class="blockInline">
-								<ons-button ng-click="deleteItem($index);">
+								<ons-button ng-click="deleteItem($index); carousel['id'+$index].setActiveCarouselItemIndex(1);">
 									Delete
 									<ons-icon icon="ion-trash-a"></ons-icon>
 								</ons-button>
 							</div>
 							<div class="blockInline">
-								<ons-button ng-click="carousel['id'+$index].setActiveCarouselItemIndex(1); completeItem($index);" ng-show="item.category!='~'">
+								<ons-button ng-click="carousel['id'+$index].setActiveCarouselItemIndex(1); completeItem($index);" ng-hide="item.completed">
 									Complete
 									<ons-icon icon="ion-checkmark-round"></ons-icon>
 								</ons-button>
@@ -41,7 +40,7 @@
 				</ons-carousel-item>
 				<ons-carousel-item class="list-action-item">
 					<div class="name">
-						{{item.name}} <span class="desc"><ons-icon icon="ion-checkmark-round" ng-show="item.category=='~'"></ons-icon></span>
+						{{item.name}} <span class="desc"><ons-icon icon="ion-checkmark-round" ng-show="item.completed"></ons-icon></span>
 					</div>
 					<div class="desc">
 						{{item.date.getFullYear() + "/" + (item.date.getMonth() + 1) + "/" + item.date.getDate()}}

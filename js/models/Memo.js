@@ -4,36 +4,31 @@ var Item = function(name, category, description) {
 	this.name = name;
 	this.category = category;
 	this.description = description;
+	this.completed = false;
 	this.date = new Date();
 };
 
 var MemoContainer = function() {
 	this.raw = [];
+	this.completedCount = 0;
 	this.filteredIndexes = [];
 	this.filter = "*";
 	this.categoryList = [];
-	this.categoryCount = {};
-	/*this.categoryList = function(){
-		return Object.keys(this.categoryCount);
-	};*/
+	this.countCategories = {};
 	this.filteredMemo = function() {
-		if (this.filter === "*") {
-			return this.raw.slice();
-		} else {
-			return this.filteredIndexes.map(function(index) {
-				return this.raw[index];
-			}, this);
-		}
+		return this.filteredIndexes.map(function(index) {
+			return this.raw[index];
+		}, this);
 	};
 	this.fixtures = function() {
 		this.raw = [new Item("Buy bananas", "shopping", ""), new Item("Call mother", "calls", ""), new Item("Buy apples", "shopping", ""), new Item("Study Japanese", "homework", "")];
-		this.filteredIndexes = [0, 2];
-		this.filter = "shopping";
+		this.filteredIndexes = [0, 1, 2, 3];
+		this.filter = "*";
 		this.categoryList = "calls homework shopping".split(' ');
-		this.categoryCount = {
-			"calls": 1,
-			"homework": 1,
-			"shopping": 2
+		this.countCategories = {
+			"calls": {"total":1,"completed":0},
+			"homework": {"total":1,"completed":0},
+			"shopping": {"total":2,"completed":0},
 		};
 	};
 };
