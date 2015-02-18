@@ -1,0 +1,25 @@
+<ons-page  ng-controller="addItemController">
+    <ons-toolbar fixed-style>
+        <div class="left"><ons-back-button>Back</ons-back-button></div>
+        <div class="center">Create a new task</div>
+        <div class="right">
+			<ons-button	modifier="quiet" ng-click="addItem();">
+			Add <ons-icon icon="ion-checkmark"></ons-icon>
+			</ons-button>
+        </div>
+    </ons-toolbar>
+	<br />
+    <div style="text-align: center">
+		<ons-list>
+			<ons-list-item>
+				<input id="input-name" type="text" placeholder="Name" ng-model="item_name" class="text-input text-input--transparent" style="margin-top:8px; width: 100%;">
+			</ons-list-item>
+			<ons-list-item>
+				<input type="text" placeholder="Category" ng-model="item_category" class="text-input text-input--transparent" style="margin-top:8px; width: 100%;">
+			</ons-list-item>
+			<ons-list-item>
+				<textarea type="text" placeholder="Description" ng-model="item_description" class="textarea textarea--transparent" style="margin-top:8px; width: 100%;">
+			</ons-list-item>
+		</ons-list>
+    </div>
+</ons-page>
