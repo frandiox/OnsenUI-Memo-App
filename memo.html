@@ -38,7 +38,7 @@
 						</div>
 					</div>
 				</ons-carousel-item>
-				<ons-carousel-item class="list-action-item" ng-click="setSelected($index); myNavigator.pushPage('itemdetails.html');">
+				<ons-carousel-item class="list-action-item" ng-click="carousel['id'+$index].setActiveCarouselItemIndex(0);">
 					<div class="name">
 						{{item.name}} <span class="desc"><ons-icon icon="ion-checkmark-round" ng-show="item.completed"></ons-icon></span>
 					</div>
