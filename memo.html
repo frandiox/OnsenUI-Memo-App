@@ -11,7 +11,7 @@
 	<p style="text-align: center; color: #999; font-size: 14px;">{{category_label}}</p>
 	<div class="list-action-item" ng-hide="countFiltered">Nothing found</div>
 	<ons-list>
-		<ons-list-item modifier="chevron" ng-repeat="item in filteredMemo track by $index">
+		<ons-list-item modifier="tappable" ng-repeat="item in filteredMemo track by $index">
 			<ons-carousel var="{{'carousel.id' + $index}}" swipeable style="height: 72px; width: 100%;" initial-index="1" auto-scroll>
 				<ons-carousel-item class="list-action-menu">
 					<!-- ACTIONS -->
@@ -38,7 +38,7 @@
 						</div>
 					</div>
 				</ons-carousel-item>
-				<ons-carousel-item class="list-action-item">
+				<ons-carousel-item class="list-action-item" ng-click="setSelected($index); myNavigator.pushPage('itemdetails.html');">
 					<div class="name">
 						{{item.name}} <span class="desc"><ons-icon icon="ion-checkmark-round" ng-show="item.completed"></ons-icon></span>
 					</div>

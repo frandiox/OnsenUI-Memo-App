@@ -14,13 +14,17 @@
 	display: inline;
 }
 
-.list-action-menu:active {
- 	background-color: #666;
+.list-action-menu {
+	background-color: #D1D1D1;
+	color: white;
+	padding: 0 12px;
+	box-sizing: border-box;
+	line-height: 72px;
 }
 
 .list-action-item {
  	padding: 0 16px;
-	 box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .name {
@@ -76,7 +80,7 @@
 	height: 50px;
 	border-radius: 4px;
 }
-.item-title {
+.item-name {
 	font-size: 15px;
 	font-weight: 500;
 }
