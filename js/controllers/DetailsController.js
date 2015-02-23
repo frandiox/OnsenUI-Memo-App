@@ -8,6 +8,9 @@ myApp.controller('detailsController', function($scope, memoService) {
 	ons.createPopover('popover.html').then(function(popover) {
 		$scope.popover = popover;
 	});
+	$scope.$on('$destroy',function(){
+		$scope.popover.destroy();
+	});
 
 	$scope.modifyItem = function() {
 

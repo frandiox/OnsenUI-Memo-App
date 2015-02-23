@@ -3,6 +3,9 @@ myApp.controller('addItemController', function($scope, memoService) {
 	ons.createPopover('popover.html').then(function(popover) {
 		$scope.popover = popover;
 	});
+	$scope.$on('$destroy',function(){
+		$scope.popover.destroy();
+	});
 
 	$scope.addItem = function() {
 		if (typeof($scope.item_name) != 'undefined' && $scope.item_name !== '') {
