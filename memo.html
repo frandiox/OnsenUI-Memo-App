@@ -19,20 +19,17 @@
 						<div class="fixer-container">
 							<div class="blockInline">
 								<ons-button ng-click="deleteItem($index); carousel['id'+$index].setActiveCarouselItemIndex(1);">
-									Delete
 									<ons-icon icon="ion-trash-a"></ons-icon>
 								</ons-button>
 							</div>
 							<div class="blockInline">
 								<ons-button ng-click="carousel['id'+$index].setActiveCarouselItemIndex(1); completeItem($index);" ng-hide="item.completed">
-									Complete
 									<ons-icon icon="ion-checkmark-round"></ons-icon>
 								</ons-button>
 							</div>
 							<div class="blockInline">
 								<ons-button ng-click="setSelected($index); myNavigator.pushPage('itemdetails.html');">
-									Details
-									<ons-icon icon="ion-clipboard"></ons-icon>
+									<ons-icon icon="ion-information-circled"></ons-icon>
 								</ons-button>
 							</div>
 						</div>
