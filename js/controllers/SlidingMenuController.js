@@ -6,8 +6,8 @@ myApp.controller('slidingMenuController', function($scope){
 	$scope.close = function(){
 		$scope.slidingMenu.setSwipeable(false);
 	};
-	$scope.checkSlidingMenuStatus = function(){
-		$scope.slidingMenu.on('postclose',$scope.close);
-		$scope.slidingMenu.on('postopen',$scope.open);
-	};
+
+	$scope.slidingMenu.on('postclose',$scope.close);
+	$scope.slidingMenu.on('postopen',$scope.open);
+
 });
