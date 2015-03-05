@@ -17,7 +17,7 @@ myApp.controller('addItemController', function($scope, memoService) {
 			var newItem = new Item($scope.item_name, category, $scope.item_description);
 			memoService.addMemo(newItem);
 			memoService.addToView(newItem);
-			$scope.ons.navigator.popPage();
+			$scope.myNavigator.popPage();
 		} else {
 			$scope.popover.show('#input-name');
 		}

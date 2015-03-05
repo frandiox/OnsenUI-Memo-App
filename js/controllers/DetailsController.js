@@ -30,7 +30,7 @@ myApp.controller('detailsController', function($scope, memoService) {
 				}
 			}
 			selected.description = $scope.item_description;
-			$scope.ons.navigator.popPage();
+			$scope.myNavigator.popPage();
 		} else {
 			$scope.popover.show('#item-name');
 		}

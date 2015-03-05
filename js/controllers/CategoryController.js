@@ -11,7 +11,7 @@ myApp.controller('categoryController', function($scope, $rootScope, memoService)
 	}, function(newValue) {
 		$scope.countCategories = newValue;
 	}, true);
-	
+
 	$scope.$watch(function() {
 		return memoService.countCompletedItems();
 	}, function(newValue) {
@@ -26,7 +26,7 @@ myApp.controller('categoryController', function($scope, $rootScope, memoService)
 
 	$scope.setViewRefresh = function(newView,newCategory) {
 		$rootScope.$broadcast('restoreCarousel');
-		
+
 		if (typeof newCategory != 'undefined'){
 			memoService.setCategory(newCategory);
 		}
