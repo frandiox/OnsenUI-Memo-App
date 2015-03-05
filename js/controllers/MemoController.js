@@ -42,7 +42,7 @@ myApp.controller('memoController', function($scope, memoService) {
 			memoService.removeFromView(index, 0);
 		}
 	};
-	
+
 	// Fixes some distance bug in Carousel when changing view
 	$scope.$on('restoreCarousel',function(){
 		var itemNumber = memoService.countFilteredMemo();
