@@ -7,18 +7,20 @@ myApp.controller('memoController', function($scope, memoService) {
 	}, true);
 
 	$scope.$watch(function() {
-		return memoService.getCurrentView();
+		return {
+			view : memoService.getCurrentView(),
+			category : memoService.getCategory()
+		};
 	}, function(newValue) {
-		if (newValue == ALL) {
-				$scope.category_label = 'All tasks';
-		} else if (newValue == COMPLETED) {
+		if (newValue.view == ALL) {
+			$scope.category_label = 'All tasks';
+		} else if (newValue.view == COMPLETED) {
 			$scope.category_label = 'Completed tasks';
 		} else {
-			var newCategory = memoService.getCategory();
-			if (newCategory == ' ') {
+			if (newValue.category == ' ') {
 				$scope.category_label = 'Tasks without category';
 			} else {
-				$scope.category_label = 'Category: ' + newCategory;
+				$scope.category_label = 'Category: ' + newValue.category;
 			}
 		}
 	}, true);
